@@ -57,38 +57,39 @@ const InteractionsBaseComponent = React.memo<Props>(function InteractionsBaseCom
   const instanceDetails = selectedInteractionData?.instanceDetails;
 
   return (
-    <ExpandingToolbar
-      tooltip="Inspect objects"
-      icon={<Cursor24Regular />}
-      selectedTab={interactionsTabType}
-      onSelectTab={(newSelectedTab) => setInteractionsTabType(newSelectedTab)}
-    >
-      <ToolGroup name={OBJECT_TAB_TYPE}>
-        <ToolGroupFixedSizePane>
-          {originalMessage ? (
-            <>
-              {selectedInteractionData.topic && (
-                <TopicLink addPanel={addPanel} topic={selectedInteractionData.topic} />
-              )}
-              {instanceDetails ? (
-                <ObjectDetails selectedObject={instanceDetails} timezone={timezone} />
-              ) : (
-                <></>
-              )}
-              <ObjectDetails
-                selectedObject={originalMessage}
-                interactionData={selectedInteractionData}
-                timezone={timezone}
-              />
-            </>
-          ) : (
-            <Typography variant="body2" color="text.disabled" gutterBottom>
-              Click an object in the 3D view to select it.
-            </Typography>
-          )}
-        </ToolGroupFixedSizePane>
-      </ToolGroup>
-    </ExpandingToolbar>
+    <></>
+    // <ExpandingToolbar
+    //   tooltip="Inspect objects"
+    //   icon={<Cursor24Regular />}
+    //   selectedTab={interactionsTabType}
+    //   onSelectTab={(newSelectedTab) => setInteractionsTabType(newSelectedTab)}
+    // >
+    //   <ToolGroup name={OBJECT_TAB_TYPE}>
+    //     <ToolGroupFixedSizePane>
+    //       {originalMessage ? (
+    //         <>
+    //           {selectedInteractionData.topic && (
+    //             <TopicLink addPanel={addPanel} topic={selectedInteractionData.topic} />
+    //           )}
+    //           {instanceDetails ? (
+    //             <ObjectDetails selectedObject={instanceDetails} timezone={timezone} />
+    //           ) : (
+    //             <></>
+    //           )}
+    //           <ObjectDetails
+    //             selectedObject={originalMessage}
+    //             interactionData={selectedInteractionData}
+    //             timezone={timezone}
+    //           />
+    //         </>
+    //       ) : (
+    //         <Typography variant="body2" color="text.disabled" gutterBottom>
+    //           Click an object in the 3D view to select it.
+    //         </Typography>
+    //       )}
+    //     </ToolGroupFixedSizePane>
+    //   </ToolGroup>
+    // </ExpandingToolbar>
   );
 });
 

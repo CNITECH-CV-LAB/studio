@@ -423,7 +423,7 @@ export function ThreeDeeRender(props: {
     if (!topicsToSubscribe) {
       return;
     }
-    log.debug(`Subscribing to [${topicsToSubscribe.map((t) => JSON.stringify(t)).join(", ")}]`);
+    log.info(`Subscribing to [${topicsToSubscribe.map((t) => JSON.stringify(t)).join(", ")}]`);
     context.subscribe(topicsToSubscribe);
   }, [context, topicsToSubscribe]);
 
@@ -572,6 +572,17 @@ export function ThreeDeeRender(props: {
       renderer?.publishClickTool.stop();
     }
   }, [measureActive, renderer]);
+
+  const [startRecord, setStartRecord] = useState(false);
+  const onClickRecord = useCallback(() => {
+    if (startRecord) {
+      console.log("Finish Record");
+      setStartRecord(false);
+    } else {
+      console.log("Start Record");
+      setStartRecord(true);
+    }
+  }, [startRecord]);
 
   const [publishActive, setPublishActive] = useState(false);
   useEffect(() => {
@@ -726,9 +737,11 @@ export function ThreeDeeRender(props: {
             addPanel={addPanel}
             enableStats={config.scene.enableStats ?? false}
             perspective={config.cameraState.perspective}
+            recordActive={startRecord}
             onTogglePerspective={onTogglePerspective}
             measureActive={measureActive}
             onClickMeasure={onClickMeasure}
+            onClickRecord={onClickRecord}
             canPublish={canPublish}
             publishActive={publishActive}
             onClickPublish={onClickPublish}

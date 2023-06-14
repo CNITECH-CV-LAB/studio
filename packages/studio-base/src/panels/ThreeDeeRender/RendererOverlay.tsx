@@ -2,7 +2,7 @@
 // License, v2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import { Ruler24Filled } from "@fluentui/react-icons";
+import { Ruler24Filled, Record24Filled } from "@fluentui/react-icons";
 import {
   Button,
   IconButton,
@@ -66,6 +66,9 @@ const useStyles = makeStyles()((theme) => ({
   rulerIcon: {
     transform: "rotate(45deg)",
   },
+  recordIcon: {
+    transform: "rotate(45deg)",
+  },
   threeDeeButton: {
     fontFamily: fonts.MONOSPACE,
     fontFeatureSettings: theme.typography.caption.fontFeatureSettings,
@@ -93,7 +96,9 @@ export function RendererOverlay(props: {
   perspective: boolean;
   onTogglePerspective: () => void;
   measureActive: boolean;
+  recordActive: boolean;
   onClickMeasure: () => void;
+  onClickRecord: () => void;
   canPublish: boolean;
   publishActive: boolean;
   publishClickType: PublishClickType;
@@ -216,71 +221,72 @@ export function RendererOverlay(props: {
   const showPublishControl =
     props.interfaceMode === "3d" && props.canPublish && renderer?.fixedFrameId != undefined;
   const publishControls = showPublishControl && (
-    <>
-      <IconButton
-        {...longPressPublishEvent}
-        color={props.publishActive ? "info" : "inherit"}
-        title={props.publishActive ? "Click to cancel" : "Click to publish"}
-        ref={publickClickButtonRef}
-        onClick={props.onClickPublish}
-        data-testid="publish-button"
-        style={{ fontSize: "1rem", pointerEvents: "auto" }}
-      >
-        {selectedPublishClickIcon}
-        <div
-          style={{
-            borderBottom: "6px solid currentColor",
-            borderRight: "6px solid transparent",
-            bottom: 0,
-            left: 0,
-            height: 0,
-            width: 0,
-            margin: theme.spacing(0.25),
-            position: "absolute",
-          }}
-        />
-      </IconButton>
-      <Menu
-        id="publish-menu"
-        anchorEl={publickClickButtonRef.current}
-        anchorOrigin={{ vertical: "top", horizontal: "left" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        open={publishMenuExpanded}
-        onClose={() => setPublishMenuExpanded(false)}
-        MenuListProps={{ dense: true }}
-      >
-        <MenuItem
-          selected={props.publishClickType === "pose_estimate"}
-          onClick={() => {
-            props.onChangePublishClickType("pose_estimate");
-            setPublishMenuExpanded(false);
-          }}
-        >
-          <ListItemIcon>{PublishClickIcons.pose_estimate}</ListItemIcon>
-          <ListItemText disableTypography>Publish pose estimate</ListItemText>
-        </MenuItem>
-        <MenuItem
-          selected={props.publishClickType === "pose"}
-          onClick={() => {
-            props.onChangePublishClickType("pose");
-            setPublishMenuExpanded(false);
-          }}
-        >
-          <ListItemIcon>{PublishClickIcons.pose}</ListItemIcon>
-          <ListItemText disableTypography>Publish pose</ListItemText>
-        </MenuItem>
-        <MenuItem
-          selected={props.publishClickType === "point"}
-          onClick={() => {
-            props.onChangePublishClickType("point");
-            setPublishMenuExpanded(false);
-          }}
-        >
-          <ListItemIcon>{PublishClickIcons.point}</ListItemIcon>
-          <ListItemText disableTypography>Publish point</ListItemText>
-        </MenuItem>
-      </Menu>
-    </>
+    <></>
+    // <>
+    //   <IconButton
+    //     {...longPressPublishEvent}
+    //     color={props.publishActive ? "info" : "inherit"}
+    //     title={props.publishActive ? "Click to cancel" : "Click to publish"}
+    //     ref={publickClickButtonRef}
+    //     onClick={props.onClickPublish}
+    //     data-testid="publish-button"
+    //     style={{ fontSize: "1rem", pointerEvents: "auto" }}
+    //   >
+    //     {selectedPublishClickIcon}
+    //     <div
+    //       style={{
+    //         borderBottom: "6px solid currentColor",
+    //         borderRight: "6px solid transparent",
+    //         bottom: 0,
+    //         left: 0,
+    //         height: 0,
+    //         width: 0,
+    //         margin: theme.spacing(0.25),
+    //         position: "absolute",
+    //       }}
+    //     />
+    //   </IconButton>
+    //   <Menu
+    //     id="publish-menu"
+    //     anchorEl={publickClickButtonRef.current}
+    //     anchorOrigin={{ vertical: "top", horizontal: "left" }}
+    //     transformOrigin={{ vertical: "top", horizontal: "right" }}
+    //     open={publishMenuExpanded}
+    //     onClose={() => setPublishMenuExpanded(false)}
+    //     MenuListProps={{ dense: true }}
+    //   >
+    //     <MenuItem
+    //       selected={props.publishClickType === "pose_estimate"}
+    //       onClick={() => {
+    //         props.onChangePublishClickType("pose_estimate");
+    //         setPublishMenuExpanded(false);
+    //       }}
+    //     >
+    //       <ListItemIcon>{PublishClickIcons.pose_estimate}</ListItemIcon>
+    //       <ListItemText disableTypography>Publish pose estimate</ListItemText>
+    //     </MenuItem>
+    //     <MenuItem
+    //       selected={props.publishClickType === "pose"}
+    //       onClick={() => {
+    //         props.onChangePublishClickType("pose");
+    //         setPublishMenuExpanded(false);
+    //       }}
+    //     >
+    //       <ListItemIcon>{PublishClickIcons.pose}</ListItemIcon>
+    //       <ListItemText disableTypography>Publish pose</ListItemText>
+    //     </MenuItem>
+    //     <MenuItem
+    //       selected={props.publishClickType === "point"}
+    //       onClick={() => {
+    //         props.onChangePublishClickType("point");
+    //         setPublishMenuExpanded(false);
+    //       }}
+    //     >
+    //       <ListItemIcon>{PublishClickIcons.point}</ListItemIcon>
+    //       <ListItemText disableTypography>Publish point</ListItemText>
+    //     </MenuItem>
+    //   </Menu>
+    // </>
   );
 
   const resetViewButton = showResetViewButton && (
@@ -414,6 +420,7 @@ export function RendererOverlay(props: {
             >
               <span className={classes.threeDeeButton}>3D</span>
             </IconButton>
+
             <IconButton
               data-testid="measure-button"
               className={classes.iconButton}
@@ -422,6 +429,16 @@ export function RendererOverlay(props: {
               onClick={props.onClickMeasure}
             >
               <Ruler24Filled className={classes.rulerIcon} />
+            </IconButton>
+
+            <IconButton
+              className={classes.iconButton}
+              color={props.recordActive ? "info" : "inherit"}
+              title={props.recordActive ? "DownLoad" : "Stop"}
+              onClick={props.onClickRecord}
+            >
+              <Record24Filled className={classes.recordIcon} />
+              {/* <span className={classes.iconButton}>DownLoad</span> */}
             </IconButton>
 
             {publishControls}

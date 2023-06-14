@@ -202,7 +202,7 @@ export function PanelActionsDropdown({ isUnknownPanel }: Props): JSX.Element {
 
   return (
     <div ref={buttonRef}>
-      <ToolbarIconButton
+      {/* <ToolbarIconButton
         id="panel-menu-button"
         aria-controls={menuOpen ? "panel-menu" : undefined}
         aria-haspopup="true"
@@ -212,7 +212,7 @@ export function PanelActionsDropdown({ isUnknownPanel }: Props): JSX.Element {
         title="More"
       >
         <MoreVertIcon />
-      </ToolbarIconButton>
+      </ToolbarIconButton> */}
       <Menu
         id="panel-menu"
         anchorEl={menuAnchorEl}

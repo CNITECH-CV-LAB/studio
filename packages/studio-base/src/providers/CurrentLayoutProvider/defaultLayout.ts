@@ -14,7 +14,7 @@ export const defaultLayout: LayoutData = {
     "3D!18i6zy7": {
       layers: {
         "845139cb-26bc-40b3-8161-8ab60af4baf5": {
-          visible: true,
+          visible: false,
           frameLocked: true,
           label: "Grid",
           instanceId: "845139cb-26bc-40b3-8161-8ab60af4baf5",
@@ -28,22 +28,68 @@ export const defaultLayout: LayoutData = {
           order: 1,
         },
       },
+      cameraState: {
+        perspective: true,
+        distance: 24.554753262683736,
+        phi: 36.201161190731675,
+        thetaOffset: 48.278047585690395,
+        targetOffset: [-3.965138692308386, -1.1256807555962407, 2.237021977018253e-15],
+        target: [0, 0, 0],
+        targetOrientation: [0, 0, 0, 1],
+        fovy: 45,
+        near: 0.5,
+        far: 5000,
+      },
+      followMode: "follow-pose",
+      scene: {},
+      transforms: {},
+      topics: {
+        "/points": {
+          visible: true,
+          colorField: "intensity",
+          colorMode: "colormap",
+          colorMap: "turbo",
+          pointSize: 2,
+        },
+        "/radar/points": {
+          visible: false,
+        },
+        "/cloud_registered": {
+          visible: true,
+          colorField: "intensity",
+          colorMode: "colormap",
+          colorMap: "turbo",
+          decayTime: 1000,
+          flatColor: "#0f0ff25c",
+          stixelsEnabled: false,
+          explicitAlpha: 0.40000000000000013,
+        },
+        "/initialpose": {
+          visible: false,
+        },
+        "/move_base_simple/goal": {
+          visible: false,
+        },
+        "/goal": {
+          visible: false,
+        },
+      },
+      publish: {
+        type: "point",
+        poseTopic: "/move_base_simple/goal",
+        pointTopic: "/clicked_point",
+        poseEstimateTopic: "/initialpose",
+        poseEstimateXDeviation: 0.5,
+        poseEstimateYDeviation: 0.5,
+        poseEstimateThetaDeviation: 0.26179939,
+      },
+      imageMode: {},
     },
-    "RawMessages!os6rgs": {},
-    "Image!3mnp456": {},
   },
   globalVariables: {},
   userNodes: {},
-  playbackConfig: { ...defaultPlaybackConfig },
-  layout: {
-    first: "3D!18i6zy7",
-    second: {
-      first: "Image!3mnp456",
-      second: "RawMessages!os6rgs",
-      direction: "column",
-      splitPercentage: 30,
-    },
-    direction: "row",
-    splitPercentage: 70,
+  playbackConfig: {
+    speed: 1,
   },
-} as const;
+  layout: "3D!18i6zy7",
+};

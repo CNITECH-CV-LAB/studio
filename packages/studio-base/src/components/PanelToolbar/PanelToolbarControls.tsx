@@ -68,7 +68,7 @@ const PanelToolbarControlsComponent = forwardRef<HTMLDivElement, PanelToolbarCon
         {additionalIcons}
         {showSettingsButton && (
           <ToolbarIconButton title="Settings" onClick={openSettings}>
-            <SettingsIcon />
+            {/* <SettingsIcon /> */}
           </ToolbarIconButton>
         )}
         <PanelActionsDropdown isUnknownPanel={isUnknownPanel} />

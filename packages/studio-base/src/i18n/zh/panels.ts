@@ -5,7 +5,7 @@
 import { TypeOptions } from "i18next";
 
 export const panels: Partial<TypeOptions["resources"]["panels"]> = {
-  "3D": "三维",
+  "3D": "背包实时建图",
   "3DPanelDescription": "在三维场景中显示标记、相机图像、网格、URDF 和其他内容。",
   dataSourceInfo: "数据源信息",
   dataSourceInfoDescription: "查看当前数据源的主题和时间戳等详细信息。",

@@ -230,7 +230,12 @@ export default function CurrentLayoutProvider({
 
       if (event.layoutId === layoutStateRef.current.selectedLayout.id) {
         const layouts = await layoutManager.getLayouts();
-        await setSelectedLayoutId(layouts[0]?.id);
+        const newLayout = await layoutManager.saveNewLayout({
+          name: "Default",
+          data: defaultLayout,
+          permission: "CREATOR_WRITE",
+        });
+        await setSelectedLayoutId(newLayout.id);
       }
     };
 
@@ -249,16 +254,16 @@ export default function CurrentLayoutProvider({
     // or we can't load it then save and select a default layout.
     const { currentLayoutId } = await getUserProfile();
     const layout = currentLayoutId ? await layoutManager.getLayout(currentLayoutId) : undefined;
-    if (layout) {
-      await setSelectedLayoutId(currentLayoutId, { saveToProfile: false });
-    } else {
+    // if (layout) {
+    //   await setSelectedLayoutId(currentLayoutId, { saveToProfile: false });
+    // } else {
       const newLayout = await layoutManager.saveNewLayout({
         name: "Default",
         data: defaultLayout,
         permission: "CREATOR_WRITE",
       });
       await setSelectedLayoutId(newLayout.id);
-    }
+    // }
   }, [getUserProfile, layoutManager, setSelectedLayoutId]);
 
   const actions: ICurrentLayout["actions"] = useMemo(

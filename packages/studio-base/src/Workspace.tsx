@@ -216,15 +216,15 @@ function WorkspaceContent(props: WorkspaceContentProps): JSX.Element {
   const { dialogActions, sidebarActions } = useWorkspaceActions();
 
   // file types we support for drag/drop
-  const allowedDropExtensions = useMemo(() => {
-    const extensions = [".foxe"];
-    for (const source of availableSources) {
-      if (source.type === "file" && source.supportedFileTypes) {
-        extensions.push(...source.supportedFileTypes);
-      }
-    }
-    return extensions;
-  }, [availableSources]);
+  // const allowedDropExtensions = useMemo(() => {
+  //   const extensions = [".foxe"];
+  //   for (const source of availableSources) {
+  //     if (source.type === "file" && source.supportedFileTypes) {
+  //       extensions.push(...source.supportedFileTypes);
+  //     }
+  //   }
+  //   return extensions;
+  // }, [availableSources]);
 
   // We use playerId to detect when a player changes for RemountOnValueChange below
   // see comment below above the RemountOnValueChange component
@@ -477,90 +477,90 @@ function WorkspaceContent(props: WorkspaceContentProps): JSX.Element {
 
   const [sidebarItems, sidebarBottomItems] = useMemo(() => {
     const topItems = new Map<SidebarItemKey, SidebarItem>([
-      [
-        "connection",
-        {
-          iconName: "DatabaseSettings",
-          title: "Data source",
-          component: DataSourceSidebarItem,
-          badge:
-            playerProblems && playerProblems.length > 0
-              ? { count: playerProblems.length }
-              : undefined,
-        },
-      ],
+      // [
+      //   "connection",
+      //   {
+      //     iconName: "DatabaseSettings",
+      //     title: "Data source",
+      //     component: DataSourceSidebarItem,
+      //     badge:
+      //       playerProblems && playerProblems.length > 0
+      //         ? { count: playerProblems.length }
+      //         : undefined,
+      //   },
+      // ],
     ]);
 
-    if (!enableNewTopNav) {
-      topItems.set("layouts", {
-        iconName: "FiveTileGrid",
-        title: "Layouts",
-        component: AppContextLayoutBrowser ?? LayoutBrowser,
-      });
-      topItems.set("add-panel", {
-        iconName: "RectangularClipping",
-        title: "Add panel",
-        component: AddPanel,
-      });
-    }
-    topItems.set("panel-settings", {
-      iconName: "PanelSettings",
-      title: "Panel settings",
-      component: PanelSettings,
-    });
-    if (!enableNewTopNav) {
-      topItems.set("variables", {
-        iconName: "Variable2",
-        title: "Variables",
-        component: VariablesList,
-      });
-      topItems.set("extensions", {
-        iconName: "AddIn",
-        title: "Extensions",
-        component: ExtensionsSidebar,
-      });
-    }
-    if (enableStudioLogsSidebar) {
-      topItems.set("studio-logs-settings", {
-        iconName: "BacklogList",
-        title: "Studio logs settings",
-        component: StudioLogsSettingsSidebar,
-      });
-    }
+    // if (!enableNewTopNav) {
+    //   topItems.set("layouts", {
+    //     iconName: "FiveTileGrid",
+    //     title: "Layouts",
+    //     component: AppContextLayoutBrowser ?? LayoutBrowser,
+    //   });
+    //   topItems.set("add-panel", {
+    //     iconName: "RectangularClipping",
+    //     title: "Add panel",
+    //     component: AddPanel,
+    //   });
+    // }
+    // topItems.set("panel-settings", {
+    //   iconName: "PanelSettings",
+    //   title: "Panel settings",
+    //   component: PanelSettings,
+    // });
+    // if (!enableNewTopNav) {
+    //   topItems.set("variables", {
+    //     iconName: "Variable2",
+    //     title: "Variables",
+    //     component: VariablesList,
+    //   });
+    //   topItems.set("extensions", {
+    //     iconName: "AddIn",
+    //     title: "Extensions",
+    //     component: ExtensionsSidebar,
+    //   });
+    // }
+    // if (enableStudioLogsSidebar) {
+    //   topItems.set("studio-logs-settings", {
+    //     iconName: "BacklogList",
+    //     title: "Studio logs settings",
+    //     component: StudioLogsSettingsSidebar,
+    //   });
+    // }
 
     const bottomItems = new Map<SidebarItemKey, SidebarItem>([]);
 
-    if (!enableNewTopNav) {
-      if (supportsAccountSettings) {
-        bottomItems.set("account", {
-          iconName: currentUser != undefined ? "BlockheadFilled" : "Blockhead",
-          title: currentUser != undefined ? `Signed in as ${currentUser.email}` : "Account",
-          component: AccountSettings,
-        });
-      }
+    // if (!enableNewTopNav) {
+    //   if (supportsAccountSettings) {
+    //     bottomItems.set("account", {
+    //       iconName: currentUser != undefined ? "BlockheadFilled" : "Blockhead",
+    //       title: currentUser != undefined ? `Signed in as ${currentUser.email}` : "Account",
+    //       component: AccountSettings,
+    //     });
+    //   }
 
-      for (const item of appContextSidebarItems ?? []) {
-        if (isInjectedSidebarItem(item)) {
-          bottomItems.set(item[0], item[1]);
-        }
-      }
+    //   for (const item of appContextSidebarItems ?? []) {
+    //     if (isInjectedSidebarItem(item)) {
+    //       bottomItems.set(item[0], item[1]);
+    //     }
+    //   }
 
-      bottomItems.set("app-settings", {
-        iconName: "Settings",
-        title: "Settings",
-      });
-    }
+    //   bottomItems.set("app-settings", {
+    //     iconName: "Settings",
+    //     title: "Settings",
+    //   });
+    // }
 
     return [topItems, bottomItems];
   }, [
-    DataSourceSidebarItem,
-    playerProblems,
-    enableNewTopNav,
-    enableStudioLogsSidebar,
-    AppContextLayoutBrowser,
-    supportsAccountSettings,
-    currentUser,
-    appContextSidebarItems,
+    // DataSourceSidebarItem,
+    // playerProblems,
+    // enableNewTopNav,
+    // enableStudioLogsSidebar,
+    // AppContextLayoutBrowser,
+    // supportsAccountSettings,
+    // currentUser,
+    // appContextSidebarItems,
   ]);
 
   const eventsSupported = useEvents(selectEventsSupported);
@@ -568,38 +568,42 @@ function WorkspaceContent(props: WorkspaceContentProps): JSX.Element {
 
   const leftSidebarItems = useMemo(() => {
     const items = new Map<LeftSidebarItemKey, NewSidebarItem>([
-      ["panel-settings", { title: "Panel", component: PanelSettingsSidebar }],
-      ["topics", { title: "Topics", component: TopicList }],
-      [
-        "problems",
-        {
-          title: "Problems",
-          component: ProblemsList,
-          badge:
-            playerProblems && playerProblems.length > 0
-              ? {
-                  count: playerProblems.length,
-                  color: "error",
-                }
-              : undefined,
-        },
-      ],
+      // ["panel-settings", { title: "Panel", component: PanelSettingsSidebar }],
+      // ["topics", { title: "Topics", component: TopicList }],
+      // [
+      //   "problems",
+      //   {
+      //     title: "Problems",
+      //     component: ProblemsList,
+      //     badge:
+      //       playerProblems && playerProblems.length > 0
+      //         ? {
+      //             count: playerProblems.length,
+      //             color: "error",
+      //           }
+      //         : undefined,
+      //   },
+      // ],
     ]);
     return items;
-  }, [PanelSettingsSidebar, playerProblems]);
+  }, [
+    // PanelSettingsSidebar, playerProblems
+  ]);
 
   const rightSidebarItems = useMemo(() => {
     const items = new Map<RightSidebarItemKey, NewSidebarItem>([
-      ["variables", { title: "Variables", component: VariablesList }],
+      // ["variables", { title: "Variables", component: VariablesList }],
     ]);
-    if (enableStudioLogsSidebar) {
-      items.set("studio-logs-settings", { title: "Studio Logs", component: StudioLogsSettings });
-    }
-    if (showEventsTab) {
-      items.set("events", { title: "Events", component: EventsList });
-    }
+    // if (enableStudioLogsSidebar) {
+    //   items.set("studio-logs-settings", { title: "Studio Logs", component: StudioLogsSettings });
+    // }
+    // if (showEventsTab) {
+    //   items.set("events", { title: "Events", component: EventsList });
+    // }
     return items;
-  }, [enableStudioLogsSidebar, showEventsTab]);
+  }, [
+    // enableStudioLogsSidebar, showEventsTab
+  ]);
 
   const keyDownHandlers = useMemo(() => {
     return {
@@ -637,7 +641,7 @@ function WorkspaceContent(props: WorkspaceContentProps): JSX.Element {
     >
       {props.showSignInForm && <SignInFormModal />}
       {dataSourceDialog.open && <DataSourceDialog />}
-      <DocumentDropListener onDrop={dropHandler} allowedExtensions={allowedDropExtensions} />
+      {/* <DocumentDropListener onDrop={dropHandler} allowedExtensions={allowedDropExtensions} /> */}
       <SyncAdapters />
       <KeyListener global keyDownHandlers={keyDownHandlers} />
       <div className={classes.container} ref={containerRef} tabIndex={0}>

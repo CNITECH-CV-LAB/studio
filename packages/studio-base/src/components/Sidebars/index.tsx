@@ -322,7 +322,7 @@ export default function Sidebars<
     <Stack direction="row" fullHeight overflow="hidden">
       {!enableNewTopNav && (
         <Stack className={classes.leftNav} flexShrink={0} justifyContent="space-between">
-          <Tabs
+          {/* <Tabs
             className={classes.tabs}
             orientation="vertical"
             variant="scrollable"
@@ -344,8 +344,8 @@ export default function Sidebars<
               icon={<HelpOutlineIcon color={helpMenuOpen ? "primary" : "inherit"} />}
             />
             {bottomTabs}
-          </Tabs>
-          <HelpMenu
+          </Tabs> */}
+          {/* <HelpMenu
             anchorEl={helpAnchorEl}
             open={helpMenuOpen}
             handleClose={handleHelpClose}
@@ -357,7 +357,7 @@ export default function Sidebars<
               vertical: "bottom",
               horizontal: "left",
             }}
-          />
+          /> */}
         </Stack>
       )}
       {
