@@ -79,6 +79,7 @@ export const defaultLayout: LayoutData = {
         poseTopic: "/move_base_simple/goal",
         pointTopic: "/clicked_point",
         poseEstimateTopic: "/initialpose",
+        enableTopic: "/record_switch",
         poseEstimateXDeviation: 0.5,
         poseEstimateYDeviation: 0.5,
         poseEstimateThetaDeviation: 0.26179939,

@@ -4,6 +4,8 @@
 
 export type Point = { x: number; y: number; z: number };
 
+export type Enable = { open: boolean };
+
 export type Quaternion = { x: number; y: number; z: number; w: number };
 
 export type Vector3 = { x: number; y: number; z: number };

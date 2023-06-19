@@ -18,13 +18,13 @@ export default function DocumentTitleAdapter(): JSX.Element {
   const playerName = useMessagePipeline(selectPlayerName);
 
   useEffect(() => {
-    if (!playerName) {
-      window.document.title = "Foxglove Studio";
-      return;
-    }
-    window.document.title = navigator.userAgent.includes("Mac")
-      ? playerName
-      : `${playerName} – Foxglove Studio`;
+    // if (!playerName) {
+    window.document.title = "便携式三维全景激光扫描系统";
+    return;
+    // }
+    // window.document.title = navigator.userAgent.includes("Mac")
+    //   ? playerName
+    //   : `${playerName} – Foxglove Studio`;
   }, [playerName]);
 
   return <></>;

@@ -25,6 +25,8 @@ import {
 } from "@foxglove/studio";
 import { AppSetting } from "@foxglove/studio-base/AppSetting";
 import ThemeProvider from "@foxglove/studio-base/theme/ThemeProvider";
+import { Point } from "@foxglove/studio-base/types/Messages";
+import { Enable } from "@foxglove/studio-base/util/geometry";
 
 import type {
   FollowMode,
@@ -45,6 +47,7 @@ import {
   makePointMessage,
   makePoseEstimateMessage,
   makePoseMessage,
+  makeEnableMessage,
 } from "./publish";
 import type { LayerSettingsTransform } from "./renderables/FrameAxes";
 import { PublishClickEvent } from "./renderables/PublishClickTool";
@@ -573,17 +576,6 @@ export function ThreeDeeRender(props: {
     }
   }, [measureActive, renderer]);
 
-  const [startRecord, setStartRecord] = useState(false);
-  const onClickRecord = useCallback(() => {
-    if (startRecord) {
-      console.log("Finish Record");
-      setStartRecord(false);
-    } else {
-      console.log("Start Record");
-      setStartRecord(true);
-    }
-  }, [startRecord]);
-
   const [publishActive, setPublishActive] = useState(false);
   useEffect(() => {
     if (renderer?.publishClickTool.publishClickType !== config.publish.type) {
@@ -598,14 +590,21 @@ export function ThreeDeeRender(props: {
       goal: config.publish.poseTopic,
       point: config.publish.pointTopic,
       pose: config.publish.poseEstimateTopic,
+      enable: config.publish.enableTopic,
     };
-  }, [config.publish.poseTopic, config.publish.pointTopic, config.publish.poseEstimateTopic]);
+  }, [
+    config.publish.poseTopic,
+    config.publish.pointTopic,
+    config.publish.poseEstimateTopic,
+    config.publish.enableTopic,
+  ]);
 
   useEffect(() => {
     const datatypes =
       context.dataSourceProfile === "ros2" ? PublishRos2Datatypes : PublishRos1Datatypes;
     context.advertise?.(publishTopics.goal, "geometry_msgs/PoseStamped", { datatypes });
     context.advertise?.(publishTopics.point, "geometry_msgs/PointStamped", { datatypes });
+    context.advertise?.(publishTopics.enable, "std_msgs/Boolean", { datatypes });
     context.advertise?.(publishTopics.pose, "geometry_msgs/PoseWithCovarianceStamped", {
       datatypes,
     });
@@ -614,81 +613,45 @@ export function ThreeDeeRender(props: {
       context.unadvertise?.(publishTopics.goal);
       context.unadvertise?.(publishTopics.point);
       context.unadvertise?.(publishTopics.pose);
+      context.unadvertise?.(publishTopics.enable);
     };
   }, [publishTopics, context, context.dataSourceProfile]);
 
-  const latestPublishConfig = useLatest(config.publish);
-
   useEffect(() => {
-    const onStart = () => setPublishActive(true);
-    const onSubmit = (event: PublishClickEvent & { type: "foxglove.publish-submit" }) => {
-      const frameId = renderer?.followFrameId;
-      if (frameId == undefined) {
-        log.warn("Unable to publish, renderFrameId is not set");
-        return;
-      }
-      if (!context.publish) {
-        log.error("Data source does not support publishing");
-        return;
-      }
-      if (context.dataSourceProfile !== "ros1" && context.dataSourceProfile !== "ros2") {
-        log.warn("Publishing is only supported in ros1 and ros2");
-        return;
-      }
-
-      try {
-        switch (event.publishClickType) {
-          case "point": {
-            const message = makePointMessage(event.point, frameId);
-            context.publish(publishTopics.point, message);
-            break;
-          }
-          case "pose": {
-            const message = makePoseMessage(event.pose, frameId);
-            context.publish(publishTopics.goal, message);
-            break;
-          }
-          case "pose_estimate": {
-            const message = makePoseEstimateMessage(
-              event.pose,
-              frameId,
-              latestPublishConfig.current.poseEstimateXDeviation,
-              latestPublishConfig.current.poseEstimateYDeviation,
-              latestPublishConfig.current.poseEstimateThetaDeviation,
-            );
-            context.publish(publishTopics.pose, message);
-            break;
-          }
-        }
-      } catch (error) {
-        log.info(error);
-      }
-    };
-    const onEnd = () => setPublishActive(false);
-    renderer?.publishClickTool.addEventListener("foxglove.publish-start", onStart);
-    renderer?.publishClickTool.addEventListener("foxglove.publish-submit", onSubmit);
-    renderer?.publishClickTool.addEventListener("foxglove.publish-end", onEnd);
-    return () => {
-      renderer?.publishClickTool.removeEventListener("foxglove.publish-start", onStart);
-      renderer?.publishClickTool.removeEventListener("foxglove.publish-submit", onSubmit);
-      renderer?.publishClickTool.removeEventListener("foxglove.publish-end", onEnd);
-    };
-  }, [
-    context,
-    latestPublishConfig,
-    publishTopics,
-    renderer?.followFrameId,
-    renderer?.publishClickTool,
-  ]);
+    const frameId = renderer?.followFrameId;
+    if (frameId == undefined) {
+      log.warn("Unable to publish, renderFrameId is not set");
+      return;
+    }
+    if (!context.publish) {
+      log.error("Data source does not support publishing");
+      return;
+    }
+    if (context.dataSourceProfile !== "ros1" && context.dataSourceProfile !== "ros2") {
+      log.warn("Publishing is only supported in ros1 and ros2");
+      return;
+    }
+    const is_open: Enable = { open: publishActive };
+    let point1: Point = { x: 3, y: 0, z: 0 };
+    if (publishActive) {
+      point1 = { x: 1, y: 0, z: 0 };
+    } else {
+      point1 = { x: 0, y: 0, z: 0 };
+    }
+    const message = makePointMessage(point1, frameId);
+    console.log(message);
+    context.publish(publishTopics.point, message);
+  }, [publishActive]);
 
   const onClickPublish = useCallback(() => {
     if (publishActive) {
-      renderer?.publishClickTool.stop();
+      console.log("Finish Record");
+      setPublishActive(false);
     } else {
-      renderer?.publishClickTool.start();
-      renderer?.measurementTool.stopMeasuring();
+      console.log("Start Record");
+      setPublishActive(true);
     }
-  }, [publishActive, renderer]);
+  }, [publishActive]);
 
   const onTogglePerspective = useCallback(() => {
     const currentState = renderer?.getCameraState()?.perspective ?? false;
@@ -727,7 +690,7 @@ export function ThreeDeeRender(props: {
             position: "absolute",
             top: 0,
             left: 0,
-            ...((measureActive || publishActive) && { cursor: "crosshair" }),
+            ...(measureActive && { cursor: "crosshair" }),
           }}
         />
         <RendererContext.Provider value={renderer}>
@@ -737,11 +700,9 @@ export function ThreeDeeRender(props: {
             addPanel={addPanel}
             enableStats={config.scene.enableStats ?? false}
             perspective={config.cameraState.perspective}
-            recordActive={startRecord}
             onTogglePerspective={onTogglePerspective}
             measureActive={measureActive}
             onClickMeasure={onClickMeasure}
-            onClickRecord={onClickRecord}
             canPublish={canPublish}
             publishActive={publishActive}
             onClickPublish={onClickPublish}
