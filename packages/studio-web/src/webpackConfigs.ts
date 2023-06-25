@@ -41,7 +41,8 @@ export const devServerConfig = (params: ConfigParams): WebpackConfiguration => (
 
   devServer: {
     static: {
-      directory: params.outputPath,
+      // directory: params.outputPath,
+      directory: "./public",
     },
     hot: true,
     // The problem and solution are described at <https://github.com/webpack/webpack-dev-server/issues/1604>.
@@ -50,6 +51,21 @@ export const devServerConfig = (params: ConfigParams): WebpackConfiguration => (
     //  "[WDS] Disconnected!"
     // Since we are only connecting to localhost, DNS rebinding attacks are not a concern during dev
     allowedHosts: "all",
+    proxy: {
+      "/download_pcd": {
+        target: "http://localhost:3000",
+        secure: false,
+        changeOrigin: true,
+        pathRewrite: {
+          "^/download_pcd": "/download_pcd",
+        },
+      },
+      "/files/pcd": {
+        target: "http://localhost:3000",
+        secure: false,
+        changeOrigin: true,
+      },
+    },
   },
 
   plugins: [new CleanWebpackPlugin()],

@@ -4,7 +4,7 @@
 import { MessageDefinition } from "@foxglove/message-definition";
 import { ros1, ros2galactic } from "@foxglove/rosmsg-msgs-common";
 import { fromDate } from "@foxglove/rostime";
-import { Point, makeCovarianceArray, Enable } from "@foxglove/studio-base/util/geometry";
+import { Point, makeCovarianceArray, Record } from "@foxglove/studio-base/util/geometry";
 
 import { Pose } from "./transforms/geometry";
 
@@ -13,7 +13,7 @@ export const PublishRos1Datatypes = new Map<string, MessageDefinition>(
     [
       "geometry_msgs/Point",
       "geometry_msgs/PointStamped",
-      "std_msgs/Boolean",
+      "std_msgs/String",
       "geometry_msgs/Pose",
       "geometry_msgs/PoseStamped",
       "geometry_msgs/PoseWithCovariance",
@@ -29,7 +29,7 @@ export const PublishRos2Datatypes = new Map<string, MessageDefinition>(
     [
       "geometry_msgs/Point",
       "geometry_msgs/PointStamped",
-      "std_msgs/Boolean",
+      "std_msgs/String",
       "geometry_msgs/Pose",
       "geometry_msgs/PoseStamped",
       "geometry_msgs/PoseWithCovariance",
@@ -48,13 +48,10 @@ export function makePointMessage(point: Point, frameId: string): unknown {
     point: { x: point.x, y: point.y, z: 0 },
   };
 }
-
-export function makeEnableMessage(enable: Enable, frameId: string): unknown {
-  const time = fromDate(new Date());
+export function makeRecordMessage(msg: Record): unknown {
   return {
     // seq is omitted since it is not present in ros2
-    header: { stamp: time, frame_id: frameId },
-    enable: { open: enable.open },
+    data: msg.message,
   };
 }
 

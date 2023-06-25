@@ -2,7 +2,7 @@
 // License, v2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import { Ruler24Filled, Record24Filled } from "@fluentui/react-icons";
+import { Ruler24Filled, ArrowDownload24Filled } from "@fluentui/react-icons";
 import {
   Button,
   IconButton,
@@ -66,9 +66,6 @@ const useStyles = makeStyles()((theme) => ({
   rulerIcon: {
     transform: "rotate(45deg)",
   },
-  recordIcon: {
-    transform: "rotate(45deg)",
-  },
   threeDeeButton: {
     fontFamily: fonts.MONOSPACE,
     fontFeatureSettings: theme.typography.caption.fontFeatureSettings,
@@ -97,6 +94,7 @@ export function RendererOverlay(props: {
   onTogglePerspective: () => void;
   measureActive: boolean;
   onClickMeasure: () => void;
+  onClickDownload: () => void;
   canPublish: boolean;
   publishActive: boolean;
   publishClickType: PublishClickType;
@@ -375,6 +373,16 @@ export function RendererOverlay(props: {
               onClick={props.onClickMeasure}
             >
               <Ruler24Filled className={classes.rulerIcon} />
+            </IconButton>
+
+            <IconButton
+              data-testid="download-button"
+              className={classes.iconButton}
+              color="info"
+              title="Download"
+              onClick={props.onClickDownload}
+            >
+              <ArrowDownload24Filled className={classes.iconButton} />
             </IconButton>
 
             {publishControls}

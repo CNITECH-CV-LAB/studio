@@ -131,8 +131,8 @@ export type RendererConfig = {
     /** The topic on which to publish points */
     pointTopic: string;
     /** The topic on which to publish pose estimates */
+    recordTopic: string;
     poseEstimateTopic: string;
-    enableTopic: string;
     /** The X standard deviation to publish with poses */
     poseEstimateXDeviation: number;
     /** The Y standard deviation to publish with poses */

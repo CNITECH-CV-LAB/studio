@@ -60,7 +60,7 @@ describe("migrateLegacyToNew3DPanels", () => {
             "layers": {},
             "publish": {
               "pointTopic": "/clicked_point",
-              "enableTopic": "/record_swtich",
+              "recordTopic": "/record_message",
               "poseEstimateThetaDeviation": 0.26179939,
               "poseEstimateTopic": "/initialpose",
               "poseEstimateXDeviation": 0.5,
@@ -131,7 +131,7 @@ describe("migrateLegacyToNew3DPanels", () => {
             "layers": {},
             "publish": {
               "pointTopic": "/clicked_point",
-              "enableTopic": "/record_swtich",
+              "recordTopic": "/record_message",
               "poseEstimateThetaDeviation": 0.26179939,
               "poseEstimateTopic": "/initialpose",
               "poseEstimateXDeviation": 0.5,
@@ -238,7 +238,7 @@ describe("migrateLegacyToNew3DPanels", () => {
             "layers": {},
             "publish": {
               "pointTopic": "/clicked_point",
-              "enableTopic": "/record_swtich",
+              "recordTopic": "/record_message",
               "poseEstimateThetaDeviation": 0.26179939,
               "poseEstimateTopic": "/initialpose",
               "poseEstimateXDeviation": 0.5,

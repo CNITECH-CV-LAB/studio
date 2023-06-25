@@ -22,7 +22,7 @@ const DEFAULT_PUBLISH_SETTINGS: RendererConfig["publish"] = {
   poseTopic: "/move_base_simple/goal",
   pointTopic: "/clicked_point",
   poseEstimateTopic: "/initialpose",
-  enableTopic: "/record_switch",
+  recordTopic: "/record_message",
   poseEstimateXDeviation: 0.5,
   poseEstimateYDeviation: 0.5,
   poseEstimateThetaDeviation: round(Math.PI / 12, 8),
@@ -74,8 +74,8 @@ function migrateLegacyToNew3DConfig(legacyConfig: Partial<Legacy3DConfig>): Rend
       pointTopic: legacyConfig.clickToPublishPointTopic ?? DEFAULT_PUBLISH_SETTINGS.pointTopic,
       poseEstimateTopic:
         legacyConfig.clickToPublishPoseEstimateTopic ?? DEFAULT_PUBLISH_SETTINGS.poseEstimateTopic,
-      enableTopic:
-        legacyConfig.clickToPublishPoseEstimateTopic ?? DEFAULT_PUBLISH_SETTINGS.enableTopic,
+      recordTopic:
+        legacyConfig.clickToPublishPoseEstimateTopic ?? DEFAULT_PUBLISH_SETTINGS.recordTopic,
       poseEstimateXDeviation:
         legacyConfig.clickToPublishPoseEstimateXDeviation ??
         DEFAULT_PUBLISH_SETTINGS.poseEstimateXDeviation,

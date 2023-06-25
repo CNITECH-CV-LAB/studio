@@ -21,6 +21,11 @@ export type MutablePoint = {
   y: number;
   z: number;
 };
+
+export type MutableRecordMessage = {
+  message: string;
+};
+export type RecordMsg = Readonly<MutableRecordMessage>;
 export type Point = Readonly<MutablePoint>;
 type Points = readonly Point[];
 

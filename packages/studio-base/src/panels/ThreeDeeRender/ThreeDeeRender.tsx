@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import { cloneDeep, isEqual, merge } from "lodash";
+// import * as path from "path";
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { useLatest } from "react-use";
@@ -25,8 +26,8 @@ import {
 } from "@foxglove/studio";
 import { AppSetting } from "@foxglove/studio-base/AppSetting";
 import ThemeProvider from "@foxglove/studio-base/theme/ThemeProvider";
-import { Point } from "@foxglove/studio-base/types/Messages";
-import { Enable } from "@foxglove/studio-base/util/geometry";
+import { Point, RecordMsg } from "@foxglove/studio-base/types/Messages";
+// import { Enable } from "@foxglove/studio-base/util/geometry";
 
 import type {
   FollowMode,
@@ -45,12 +46,12 @@ import {
   PublishRos1Datatypes,
   PublishRos2Datatypes,
   makePointMessage,
-  makePoseEstimateMessage,
-  makePoseMessage,
-  makeEnableMessage,
+  makeRecordMessage,
+  // makePoseEstimateMessage,
+  // makePoseMessage,
 } from "./publish";
 import type { LayerSettingsTransform } from "./renderables/FrameAxes";
-import { PublishClickEvent } from "./renderables/PublishClickTool";
+// import { PublishClickEvent } from "./renderables/PublishClickTool";
 import { DEFAULT_PUBLISH_SETTINGS } from "./renderables/PublishSettings";
 import { InterfaceMode } from "./types";
 
@@ -68,7 +69,10 @@ const PANEL_STYLE: React.CSSProperties = {
   display: "flex",
   position: "relative",
 };
-
+enum RecordMode {
+  Start = "start",
+  Stop = "stop",
+}
 function useRendererProperty<K extends keyof IRenderer>(
   renderer: IRenderer | undefined,
   key: K,
@@ -589,14 +593,14 @@ export function ThreeDeeRender(props: {
     return {
       goal: config.publish.poseTopic,
       point: config.publish.pointTopic,
+      record: config.publish.recordTopic,
       pose: config.publish.poseEstimateTopic,
-      enable: config.publish.enableTopic,
     };
   }, [
     config.publish.poseTopic,
     config.publish.pointTopic,
     config.publish.poseEstimateTopic,
-    config.publish.enableTopic,
+    config.publish.recordTopic,
   ]);
 
   useEffect(() => {
@@ -604,7 +608,7 @@ export function ThreeDeeRender(props: {
       context.dataSourceProfile === "ros2" ? PublishRos2Datatypes : PublishRos1Datatypes;
     context.advertise?.(publishTopics.goal, "geometry_msgs/PoseStamped", { datatypes });
     context.advertise?.(publishTopics.point, "geometry_msgs/PointStamped", { datatypes });
-    context.advertise?.(publishTopics.enable, "std_msgs/Boolean", { datatypes });
+    context.advertise?.(publishTopics.record, "std_msgs/String", { datatypes });
     context.advertise?.(publishTopics.pose, "geometry_msgs/PoseWithCovarianceStamped", {
       datatypes,
     });
@@ -613,46 +617,161 @@ export function ThreeDeeRender(props: {
       context.unadvertise?.(publishTopics.goal);
       context.unadvertise?.(publishTopics.point);
       context.unadvertise?.(publishTopics.pose);
-      context.unadvertise?.(publishTopics.enable);
+      context.unadvertise?.(publishTopics.record);
     };
   }, [publishTopics, context, context.dataSourceProfile]);
 
-  useEffect(() => {
-    const frameId = renderer?.followFrameId;
-    if (frameId == undefined) {
-      log.warn("Unable to publish, renderFrameId is not set");
-      return;
-    }
-    if (!context.publish) {
-      log.error("Data source does not support publishing");
-      return;
-    }
-    if (context.dataSourceProfile !== "ros1" && context.dataSourceProfile !== "ros2") {
-      log.warn("Publishing is only supported in ros1 and ros2");
-      return;
-    }
-    const is_open: Enable = { open: publishActive };
-    let point1: Point = { x: 3, y: 0, z: 0 };
-    if (publishActive) {
-      point1 = { x: 1, y: 0, z: 0 };
-    } else {
-      point1 = { x: 0, y: 0, z: 0 };
-    }
-    const message = makePointMessage(point1, frameId);
-    console.log(message);
-    context.publish(publishTopics.point, message);
-  }, [publishActive]);
+  function checkInputValid(userInput: string): boolean {
+    const fileNameRegex = /^[\w.-]+$/;
+    return fileNameRegex.test(userInput) || fileNameRegex.test(userInput + ".");
+  }
+  const handleRecordAction = useCallback(
+    (mode: RecordMode) => {
+      const frameId = renderer?.followFrameId;
+      if (frameId == undefined) {
+        log.warn("Unable to publish, renderFrameId is not set");
+        return;
+      }
+      if (!context.publish) {
+        log.error("Data source does not support publishing");
+        return;
+      }
+      if (context.dataSourceProfile !== "ros1" && context.dataSourceProfile !== "ros2") {
+        log.warn("Publishing is only supported in ros1 and ros2");
+        return;
+      }
+      let msg: RecordMsg = { message: "3" };
+      switch (mode) {
+        case RecordMode.Start: {
+          // Start recording
+          msg = { message: "1" };
+          const message = makeRecordMessage(msg);
+          console.log(message);
+          context.publish(publishTopics.record, message);
+          window.alert("开始记录点云地图");
+          break;
+        }
+        case RecordMode.Stop: {
+          // Stop recording
+          const currentDate = new Date();
+          const currentYear = currentDate.getFullYear();
+          const currentMonth = currentDate.getMonth();
+          const currentDay = currentDate.getDay();
+          const currentHour = currentDate.getHours();
+          const currentMinute = currentDate.getMinutes();
+          const currentSecond = currentDate.getSeconds();
+          const defaultValue = `${currentYear}-${currentMonth}-${currentDay}-${currentHour}-${currentMinute}-${currentSecond}`;
+          let userInput = prompt("请输入保存的PCD文件名:", defaultValue);
+          while (userInput != undefined && !checkInputValid(userInput)) {
+            userInput = prompt("输入的文件名不符合规范,请重新输入:", defaultValue);
+          }
+          if (userInput != undefined) {
+            msg = { message: "0" + userInput };
+            const message = makeRecordMessage(msg);
+            console.log(message);
+            context.publish(publishTopics.record, message);
+          }
+          break;
+        }
+        default:
+          break;
+      }
+    },
+    [context, publishTopics.record, renderer?.followFrameId],
+  );
 
   const onClickPublish = useCallback(() => {
     if (publishActive) {
-      console.log("Finish Record");
+      // console.log("Finish Record");
       setPublishActive(false);
+      handleRecordAction(RecordMode.Stop);
     } else {
-      console.log("Start Record");
+      // console.log("Start Record");
       setPublishActive(true);
+      handleRecordAction(RecordMode.Start);
     }
-  }, [publishActive]);
+  }, [handleRecordAction, publishActive]);
 
+  function downloadFile(filename: string) {
+    fetch(`/download_pcd/${filename}`)
+      .then(async (response) => {
+        if (response.ok) {
+          // 如果响应成功，执行下载操作
+          return await response.blob();
+        } else {
+          throw new Error("下载请求失败");
+        }
+      })
+      .then((blob) => {
+        // 创建一个下载链接并模拟点击
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        link.click();
+        // 释放URL对象
+        URL.revokeObjectURL(url);
+      })
+      .catch((error) => console.error(error));
+  }
+
+  async function downloadFileFromServer() {
+    fetch("/files/pcd")
+      .then(async (response) => await response.json())
+      .then((files) => {
+        files.forEach((file: string) => {
+          const popup = window.open("", "File Popup", "width=500,height=400");
+
+          // 自定义弹窗样式
+          popup!.document.body.style.backgroundColor = "#14141c";
+          popup!.document.body.style.margin = "0";
+
+          // 在弹窗中创建一个<div>元素，用于包含文件名和下载按钮
+          const container = popup!.document.createElement("div");
+          container.style.display = "flex";
+          container.style.flexDirection = "column";
+          container.style.alignItems = "center";
+          container.style.justifyContent = "center";
+          container.style.height = "40%";
+
+          const fileName = popup!.document.createElement("p");
+          fileName.textContent = file;
+          fileName.style.marginBottom = "10px";
+          fileName.style.color = "white"; // 设置文字颜色
+          fileName.style.fontSize = "50px";
+
+          const downloadButton = popup!.document.createElement("button");
+          downloadButton.textContent = "下载";
+          downloadButton.addEventListener("click", () => {
+            // 执行下载请求的代码
+            downloadFile(file);
+          });
+          downloadButton.style.backgroundColor = "blue"; // 设置按钮背景色
+          downloadButton.style.color = "white"; // 设置按钮文字颜色
+          downloadButton.style.fontSize = "30px";
+          downloadButton.style.border = "none"; // 去除按钮边框
+          downloadButton.style.padding = "10px 20px"; // 设置按钮内边距
+
+          // 将文件名和下载按钮添加到容器中
+          container.appendChild(fileName);
+          container.appendChild(downloadButton);
+
+          // 将容器添加到弹窗的文档主体中
+          popup!.document.body.appendChild(container);
+
+          const pageWidth = window.innerWidth;
+          const pageHeight = window.innerHeight;
+
+          // 自定义弹窗的位置
+          popup!.moveTo(pageWidth / 2 - 250, pageHeight / 2 - 200);
+        });
+      })
+      .catch((error) => console.error(error));
+  }
+  const onClickDownload = useCallback(() => {
+    // console.log("download");
+    downloadFileFromServer();
+  }, []);
   const onTogglePerspective = useCallback(() => {
     const currentState = renderer?.getCameraState()?.perspective ?? false;
     actionHandler({
@@ -703,6 +822,7 @@ export function ThreeDeeRender(props: {
             onTogglePerspective={onTogglePerspective}
             measureActive={measureActive}
             onClickMeasure={onClickMeasure}
+            onClickDownload={onClickDownload}
             canPublish={canPublish}
             publishActive={publishActive}
             onClickPublish={onClickPublish}

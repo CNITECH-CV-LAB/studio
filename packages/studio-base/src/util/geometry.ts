@@ -4,7 +4,7 @@
 
 export type Point = { x: number; y: number; z: number };
 
-export type Enable = { open: boolean };
+export type Record = { message: string };
 
 export type Quaternion = { x: number; y: number; z: number; w: number };
 

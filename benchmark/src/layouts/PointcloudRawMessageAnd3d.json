@@ -35,7 +35,7 @@
         "type": "point",
         "poseTopic": "/move_base_simple/goal",
         "pointTopic": "/clicked_point",
-        "enableTopic": "/record_swtich",
+        "recordTopic": "/record_message",
         "poseEstimateTopic": "/initialpose",
         "poseEstimateXDeviation": 0.5,
         "poseEstimateYDeviation": 0.5,

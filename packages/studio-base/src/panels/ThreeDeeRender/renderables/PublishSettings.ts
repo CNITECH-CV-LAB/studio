@@ -16,7 +16,7 @@ export const DEFAULT_PUBLISH_SETTINGS: RendererConfig["publish"] = {
   poseTopic: "/move_base_simple/goal",
   pointTopic: "/clicked_point",
   poseEstimateTopic: "/initialpose",
-  enableTopic: "/record_switch",
+  recordTopic: "/record_message",
   poseEstimateXDeviation: 0.5,
   poseEstimateYDeviation: 0.5,
   poseEstimateThetaDeviation: round(Math.PI / 12, 8),
