@@ -50,7 +50,6 @@ export function makePointMessage(point: Point, frameId: string): unknown {
 }
 export function makeRecordMessage(msg: Record): unknown {
   return {
-    // seq is omitted since it is not present in ros2
     data: msg.message,
   };
 }

@@ -640,7 +640,7 @@ export function ThreeDeeRender(props: {
         log.warn("Publishing is only supported in ros1 and ros2");
         return;
       }
-      let msg: RecordMsg = { message: "3" };
+      let msg: RecordMsg = { message: "2" };
       switch (mode) {
         case RecordMode.Start: {
           // Start recording
@@ -715,7 +715,7 @@ export function ThreeDeeRender(props: {
       .catch((error) => console.error(error));
   }
 
-  async function downloadFileFromServer() {
+  const downloadFileFromServer = useCallback(() => {
     fetch("/files/pcd")
       .then(async (response) => await response.json())
       .then((files) => {
@@ -767,11 +767,11 @@ export function ThreeDeeRender(props: {
         });
       })
       .catch((error) => console.error(error));
-  }
+  }, []);
   const onClickDownload = useCallback(() => {
     // console.log("download");
     downloadFileFromServer();
-  }, []);
+  }, [downloadFileFromServer]);
   const onTogglePerspective = useCallback(() => {
     const currentState = renderer?.getCameraState()?.perspective ?? false;
     actionHandler({
