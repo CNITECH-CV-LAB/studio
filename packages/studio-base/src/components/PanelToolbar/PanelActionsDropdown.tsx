@@ -19,7 +19,7 @@ import {
   SplitVertical20Regular,
 } from "@fluentui/react-icons";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+// import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Divider, Menu, MenuItem } from "@mui/material";
 import { MouseEvent, useCallback, useContext, useMemo, useRef, useState } from "react";
 import { MosaicContext, MosaicNode, MosaicWindowContext } from "react-mosaic-component";
@@ -27,7 +27,7 @@ import { makeStyles } from "tss-react/mui";
 
 import PanelContext from "@foxglove/studio-base/components/PanelContext";
 import ChangePanelMenu from "@foxglove/studio-base/components/PanelToolbar/ChangePanelMenu";
-import ToolbarIconButton from "@foxglove/studio-base/components/PanelToolbar/ToolbarIconButton";
+// import ToolbarIconButton from "@foxglove/studio-base/components/PanelToolbar/ToolbarIconButton";
 import { getPanelTypeFromMosaic } from "@foxglove/studio-base/components/PanelToolbar/utils";
 import { useCurrentLayoutActions } from "@foxglove/studio-base/context/CurrentLayoutContext";
 
@@ -81,10 +81,10 @@ export function PanelActionsDropdown({ isUnknownPanel }: Props): JSX.Element {
     [mosaicActions, mosaicWindowActions],
   );
 
-  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setSubmenuAnchorEl(undefined);
-    setMenuAnchorEl(event.currentTarget);
-  };
+  // const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   setSubmenuAnchorEl(undefined);
+  //   setMenuAnchorEl(event.currentTarget);
+  // };
 
   const handleMenuClose = () => {
     setSubmenuAnchorEl(undefined);

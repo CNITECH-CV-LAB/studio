@@ -57,7 +57,7 @@ export default function CurrentLayoutProvider({
   children,
 }: React.PropsWithChildren<unknown>): JSX.Element {
   const { enqueueSnackbar } = useSnackbar();
-  const { getUserProfile, setUserProfile } = useUserProfileStorage();
+  const { setUserProfile } = useUserProfileStorage();
   const layoutManager = useLayoutManager();
   const analytics = useAnalytics();
   const isMounted = useMountedState();
@@ -229,7 +229,6 @@ export default function CurrentLayoutProvider({
       }
 
       if (event.layoutId === layoutStateRef.current.selectedLayout.id) {
-        const layouts = await layoutManager.getLayouts();
         const newLayout = await layoutManager.saveNewLayout({
           name: "Default",
           data: defaultLayout,
@@ -252,19 +251,19 @@ export default function CurrentLayoutProvider({
 
     // Retreive the selected layout id from the user's profile. If there's no layout specified
     // or we can't load it then save and select a default layout.
-    const { currentLayoutId } = await getUserProfile();
-    const layout = currentLayoutId ? await layoutManager.getLayout(currentLayoutId) : undefined;
+    // const { currentLayoutId } = await getUserProfile();
+    // const layout = currentLayoutId ? await layoutManager.getLayout(currentLayoutId) : undefined;
     // if (layout) {
     //   await setSelectedLayoutId(currentLayoutId, { saveToProfile: false });
     // } else {
-      const newLayout = await layoutManager.saveNewLayout({
-        name: "Default",
-        data: defaultLayout,
-        permission: "CREATOR_WRITE",
-      });
-      await setSelectedLayoutId(newLayout.id);
+    const newLayout = await layoutManager.saveNewLayout({
+      name: "Default",
+      data: defaultLayout,
+      permission: "CREATOR_WRITE",
+    });
+    await setSelectedLayoutId(newLayout.id);
     // }
-  }, [getUserProfile, layoutManager, setSelectedLayoutId]);
+  }, [layoutManager, setSelectedLayoutId]);
 
   const actions: ICurrentLayout["actions"] = useMemo(
     () => ({

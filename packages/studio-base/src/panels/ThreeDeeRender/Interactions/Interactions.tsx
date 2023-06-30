@@ -11,17 +11,17 @@
 //   found at http://www.apache.org/licenses/LICENSE-2.0
 //   You may not use this file except in compliance with the License.
 
-import { Cursor24Regular } from "@fluentui/react-icons";
-import { Typography } from "@mui/material";
+// import { Cursor24Regular } from "@fluentui/react-icons";
+// import { Typography } from "@mui/material";
 
-import type { LayoutActions } from "@foxglove/studio";
-import ExpandingToolbar, {
-  ToolGroup,
-  ToolGroupFixedSizePane,
-} from "@foxglove/studio-base/components/ExpandingToolbar";
+// import type { LayoutActions } from "@foxglove/studio";
+// import ExpandingToolbar, {
+//   ToolGroup,
+//   ToolGroupFixedSizePane,
+// } from "@foxglove/studio-base/components/ExpandingToolbar";
 
-import ObjectDetails from "./ObjectDetails";
-import TopicLink from "./TopicLink";
+// import ObjectDetails from "./ObjectDetails";
+// import TopicLink from "./TopicLink";
 import { InteractionData } from "./types";
 import { Pose } from "../transforms";
 
@@ -38,60 +38,62 @@ export type SelectionObject = {
 };
 
 type Props = {
-  interactionsTabType?: TabType;
-  setInteractionsTabType: (arg0?: TabType) => void;
-  addPanel: LayoutActions["addPanel"];
-  selectedObject?: SelectionObject;
-  timezone: string | undefined;
+  // interactionsTabType?: TabType;
+  // setInteractionsTabType: (arg0?: TabType) => void;
+  // addPanel: LayoutActions["addPanel"];
+  // selectedObject?: SelectionObject;
+  // timezone: string | undefined;
 };
 
-const InteractionsBaseComponent = React.memo<Props>(function InteractionsBaseComponent({
-  addPanel,
-  selectedObject,
-  interactionsTabType,
-  setInteractionsTabType,
-  timezone,
-}: Props) {
-  const selectedInteractionData = selectedObject?.object.interactionData;
-  const originalMessage = selectedInteractionData?.originalMessage;
-  const instanceDetails = selectedInteractionData?.instanceDetails;
+const InteractionsBaseComponent = React.memo<Props>(
+  // eslint-disable-next-line no-empty-pattern
+  function InteractionsBaseComponent({}: // addPanel,
+  // selectedObject,
+  // interactionsTabType,
+  // setInteractionsTabType,
+  // timezone,
+  Props) {
+    // const selectedInteractionData = selectedObject?.object.interactionData;
+    // const originalMessage = selectedInteractionData?.originalMessage;
+    // const instanceDetails = selectedInteractionData?.instanceDetails;
 
-  return (
-    <></>
-    // <ExpandingToolbar
-    //   tooltip="Inspect objects"
-    //   icon={<Cursor24Regular />}
-    //   selectedTab={interactionsTabType}
-    //   onSelectTab={(newSelectedTab) => setInteractionsTabType(newSelectedTab)}
-    // >
-    //   <ToolGroup name={OBJECT_TAB_TYPE}>
-    //     <ToolGroupFixedSizePane>
-    //       {originalMessage ? (
-    //         <>
-    //           {selectedInteractionData.topic && (
-    //             <TopicLink addPanel={addPanel} topic={selectedInteractionData.topic} />
-    //           )}
-    //           {instanceDetails ? (
-    //             <ObjectDetails selectedObject={instanceDetails} timezone={timezone} />
-    //           ) : (
-    //             <></>
-    //           )}
-    //           <ObjectDetails
-    //             selectedObject={originalMessage}
-    //             interactionData={selectedInteractionData}
-    //             timezone={timezone}
-    //           />
-    //         </>
-    //       ) : (
-    //         <Typography variant="body2" color="text.disabled" gutterBottom>
-    //           Click an object in the 3D view to select it.
-    //         </Typography>
-    //       )}
-    //     </ToolGroupFixedSizePane>
-    //   </ToolGroup>
-    // </ExpandingToolbar>
-  );
-});
+    return (
+      <></>
+      // <ExpandingToolbar
+      //   tooltip="Inspect objects"
+      //   icon={<Cursor24Regular />}
+      //   selectedTab={interactionsTabType}
+      //   onSelectTab={(newSelectedTab) => setInteractionsTabType(newSelectedTab)}
+      // >
+      //   <ToolGroup name={OBJECT_TAB_TYPE}>
+      //     <ToolGroupFixedSizePane>
+      //       {originalMessage ? (
+      //         <>
+      //           {selectedInteractionData.topic && (
+      //             <TopicLink addPanel={addPanel} topic={selectedInteractionData.topic} />
+      //           )}
+      //           {instanceDetails ? (
+      //             <ObjectDetails selectedObject={instanceDetails} timezone={timezone} />
+      //           ) : (
+      //             <></>
+      //           )}
+      //           <ObjectDetails
+      //             selectedObject={originalMessage}
+      //             interactionData={selectedInteractionData}
+      //             timezone={timezone}
+      //           />
+      //         </>
+      //       ) : (
+      //         <Typography variant="body2" color="text.disabled" gutterBottom>
+      //           Click an object in the 3D view to select it.
+      //         </Typography>
+      //       )}
+      //     </ToolGroupFixedSizePane>
+      //   </ToolGroup>
+      // </ExpandingToolbar>
+    );
+  },
+);
 
 // Wrap the Interactions so that we don't rerender every time any part of the PanelContext config changes, but just the
 // one value that we care about.

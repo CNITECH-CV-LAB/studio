@@ -20,6 +20,7 @@ const app = express();
 app.get("/files/pcd", (_: Request, res: Response) => {
   // 读取文件列表
   const directoryPath = path.join(__dirname, "public/PCD");
+
   fs.readdir(directoryPath, (err, files) => {
     if (err) {
       return res.status(500).json({ error: "Unable to read files" });
@@ -42,6 +43,5 @@ app.get("/download_pcd/:filename", (req: Request, res: Response) => {
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
-
 // foxglove-depcheck-used: webpack-dev-server
 export default [devServerConfig(params), mainConfig(params)];

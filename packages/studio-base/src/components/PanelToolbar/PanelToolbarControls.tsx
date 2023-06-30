@@ -11,7 +11,7 @@
 //   found at http://www.apache.org/licenses/LICENSE-2.0
 //   You may not use this file except in compliance with the License.
 
-import SettingsIcon from "@mui/icons-material/Settings";
+// import SettingsIcon from "@mui/icons-material/Settings";
 import { forwardRef, useCallback, useContext, useMemo } from "react";
 
 import PanelContext from "@foxglove/studio-base/components/PanelContext";
