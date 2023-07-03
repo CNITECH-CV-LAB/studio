@@ -26,8 +26,7 @@ import {
 } from "@foxglove/studio";
 import { AppSetting } from "@foxglove/studio-base/AppSetting";
 import ThemeProvider from "@foxglove/studio-base/theme/ThemeProvider";
-import { RecordMsg } from "@foxglove/studio-base/types/Messages";
-// import { Point, RecordMsg } from "@foxglove/studio-base/types/Messages";
+import { Point, RecordMsg } from "@foxglove/studio-base/types/Messages";
 // import { Enable } from "@foxglove/studio-base/util/geometry";
 
 import type {
@@ -46,7 +45,7 @@ import { CameraState, DEFAULT_CAMERA_STATE } from "./camera";
 import {
   PublishRos1Datatypes,
   PublishRos2Datatypes,
-  // makePointMessage,
+  makePointMessage,
   makeRecordMessage,
   // makePoseEstimateMessage,
   // makePoseMessage,

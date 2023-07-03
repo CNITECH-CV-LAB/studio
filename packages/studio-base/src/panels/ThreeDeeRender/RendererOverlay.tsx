@@ -6,12 +6,12 @@ import { Ruler24Filled, ArrowDownload24Filled } from "@fluentui/react-icons";
 import {
   Button,
   IconButton,
-  // ListItemIcon,
-  // ListItemText,
-  // Menu,
-  // MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
   Paper,
-  // useTheme,
+  useTheme,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -116,7 +116,7 @@ export function RendererOverlay(props: {
   const [selectedRenderable, setSelectedRenderable] = useState<PickedRenderable | undefined>(
     undefined,
   );
-  const [interactionsTabType] = useState<TabType | undefined>(undefined);
+  const [interactionsTabType, setInteractionsTabType] = useState<TabType | undefined>(undefined);
   const renderer = useRenderer();
 
   // Toggle object selection mode on/off in the renderer
@@ -203,15 +203,15 @@ export function RendererOverlay(props: {
   }, [renderer, selectedRenderable]);
 
   const publickClickButtonRef = useRef<HTMLButtonElement>(ReactNull);
-  // const [publishMenuExpanded, setPublishMenuExpanded] = useState(false);
+  const [publishMenuExpanded, setPublishMenuExpanded] = useState(false);
   const selectedPublishClickIcon = PublishClickIcons[props.publishClickType];
 
   const onLongPressPublish = useCallback(() => {
-    // setPublishMenuExpanded(true);
+    setPublishMenuExpanded(true);
   }, []);
   const longPressPublishEvent = useLongPress(onLongPressPublish);
 
-  // const theme = useTheme();
+  const theme = useTheme();
 
   // Publish control is only available if the canPublish prop is true and we have a fixed frame in the renderer
   const showPublishControl =
@@ -346,11 +346,11 @@ export function RendererOverlay(props: {
           // Only show on hover for image panel
           (props.interfaceMode === "3d" || mousePresent) && (
             <Interactions
-            // addPanel={props.addPanel}
-            // selectedObject={selectedObject}
-            // interactionsTabType={interactionsTabType}
-            // setInteractionsTabType={setInteractionsTabType}
-            // timezone={props.timezone}
+              addPanel={props.addPanel}
+              selectedObject={selectedObject}
+              interactionsTabType={interactionsTabType}
+              setInteractionsTabType={setInteractionsTabType}
+              timezone={props.timezone}
             />
           )
         }

@@ -2,11 +2,11 @@
 // License, v2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-// import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-// import { Badge, Paper, Tab, Tabs } from "@mui/material";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { Badge, Paper, Tab, Tabs } from "@mui/material";
 import {
   ComponentProps,
-  // MouseEvent,
+  MouseEvent,
   PropsWithChildren,
   useCallback,
   useEffect,
@@ -17,16 +17,16 @@ import { MosaicNode, MosaicWithoutDragDropContext } from "react-mosaic-component
 import { makeStyles } from "tss-react/mui";
 
 import { AppSetting } from "@foxglove/studio-base/AppSetting";
-// import { HelpMenu } from "@foxglove/studio-base/components/AppBar/HelpMenu";
+import { HelpMenu } from "@foxglove/studio-base/components/AppBar/HelpMenu";
 import { BuiltinIcon } from "@foxglove/studio-base/components/BuiltinIcon";
 import ErrorBoundary from "@foxglove/studio-base/components/ErrorBoundary";
-// import { MemoryUseIndicator } from "@foxglove/studio-base/components/MemoryUseIndicator";
+import { MemoryUseIndicator } from "@foxglove/studio-base/components/MemoryUseIndicator";
 import Stack from "@foxglove/studio-base/components/Stack";
 import { useAppConfigurationValue } from "@foxglove/studio-base/hooks";
 import isDesktopApp from "@foxglove/studio-base/util/isDesktopApp";
 
 import { NewSidebar, NewSidebarItem } from "./NewSidebar";
-// import { TabSpacer } from "./TabSpacer";
+import { TabSpacer } from "./TabSpacer";
 import "react-mosaic-component/react-mosaic-component.css";
 
 function Noop(): ReactNull {
@@ -49,34 +49,34 @@ const useStyles = makeStyles()((theme) => ({
     borderRight: `1px solid ${theme.palette.divider}`,
     backgroundColor: theme.palette.background.paper,
   },
-  // tabs: {
-  //   flexGrow: 1,
+  tabs: {
+    flexGrow: 1,
 
-  //   ".MuiTabs-flexContainerVertical": {
-  //     height: "100%",
-  //   },
-  // },
-  // tab: {
-  //   padding: theme.spacing(1.625),
-  //   minWidth: 50,
-  // },
-  // badge: {
-  //   "> *:not(.MuiBadge-badge)": {
-  //     width: "1.5rem",
-  //     height: "1.5rem",
-  //     fontSize: "1.5rem",
-  //     display: "flex",
+    ".MuiTabs-flexContainerVertical": {
+      height: "100%",
+    },
+  },
+  tab: {
+    padding: theme.spacing(1.625),
+    minWidth: 50,
+  },
+  badge: {
+    "> *:not(.MuiBadge-badge)": {
+      width: "1.5rem",
+      height: "1.5rem",
+      fontSize: "1.5rem",
+      display: "flex",
 
-  //     ".root-span": {
-  //       display: "contents",
-  //     },
-  //     svg: {
-  //       fontSize: "inherit",
-  //       width: "auto",
-  //       height: "auto",
-  //     },
-  //   },
-  // },
+      ".root-span": {
+        display: "contents",
+      },
+      svg: {
+        fontSize: "inherit",
+        width: "auto",
+        height: "auto",
+      },
+    },
+  },
   mosaicWrapper: {
     flex: "1 1 100%",
 
@@ -151,7 +151,7 @@ export default function Sidebars<
     items,
     bottomItems,
     selectedKey,
-    // onSelectKey,
+    onSelectKey,
     leftItems,
     selectedLeftKey,
     onSelectLeftKey,
@@ -163,9 +163,9 @@ export default function Sidebars<
     rightSidebarSize,
     setRightSidebarSize,
   } = props;
-  // const [enableMemoryUseIndicator = false] = useAppConfigurationValue<boolean>(
-  //   AppSetting.ENABLE_MEMORY_USE_INDICATOR,
-  // );
+  const [enableMemoryUseIndicator = false] = useAppConfigurationValue<boolean>(
+    AppSetting.ENABLE_MEMORY_USE_INDICATOR,
+  );
   // Since we can't toggle the title bar on an electron window, keep the setting at its initial
   // value until the app is reloaded/relaunched.
   const [currentEnableNewTopNav = false] = useAppConfigurationValue<boolean>(
@@ -181,16 +181,16 @@ export default function Sidebars<
     return new Map([...items, ...bottomItems]);
   }, [bottomItems, items]);
 
-  // const [helpAnchorEl, setHelpAnchorEl] = useState<undefined | HTMLElement>(undefined);
+  const [helpAnchorEl, setHelpAnchorEl] = useState<undefined | HTMLElement>(undefined);
 
-  // const helpMenuOpen = Boolean(helpAnchorEl);
+  const helpMenuOpen = Boolean(helpAnchorEl);
 
-  // const handleHelpClick = (event: MouseEvent<HTMLElement>) => {
-  //   setHelpAnchorEl(event.currentTarget);
-  // };
-  // const handleHelpClose = () => {
-  //   setHelpAnchorEl(undefined);
-  // };
+  const handleHelpClick = (event: MouseEvent<HTMLElement>) => {
+    setHelpAnchorEl(event.currentTarget);
+  };
+  const handleHelpClose = () => {
+    setHelpAnchorEl(undefined);
+  };
 
   const oldLeftSidebarOpen = !enableNewTopNav
     ? selectedKey != undefined && allOldLeftItems.has(selectedKey)
@@ -242,70 +242,70 @@ export default function Sidebars<
   const SelectedLeftComponent =
     (selectedKey != undefined && allOldLeftItems.get(selectedKey)?.component) || Noop;
 
-  // const onClickTabAction = useCallback(
-  //   (key: OldLeftKey) => {
-  //     // toggle tab selected/unselected on click
-  //     if (selectedKey === key) {
-  //       onSelectKey(undefined);
-  //     } else {
-  //       onSelectKey(key);
-  //     }
-  //   },
-  //   [selectedKey, onSelectKey],
-  // );
+  const onClickTabAction = useCallback(
+    (key: OldLeftKey) => {
+      // toggle tab selected/unselected on click
+      if (selectedKey === key) {
+        onSelectKey(undefined);
+      } else {
+        onSelectKey(key);
+      }
+    },
+    [selectedKey, onSelectKey],
+  );
 
-  // const topTabs = useMemo(() => {
-  //   return [...items.entries()].map(([key, item]) => (
-  //     <Tab
-  //       data-sidebar-key={key}
-  //       className={classes.tab}
-  //       value={key}
-  //       key={key}
-  //       title={item.title}
-  //       onClick={() => onClickTabAction(key)}
-  //       icon={
-  //         <Badge
-  //           className={classes.badge}
-  //           badgeContent={item.badge?.count}
-  //           invisible={item.badge == undefined}
-  //           color="error"
-  //           anchorOrigin={{
-  //             vertical: "bottom",
-  //             horizontal: "right",
-  //           }}
-  //         >
-  //           <BuiltinIcon name={item.iconName} />
-  //         </Badge>
-  //       }
-  //     />
-  //   ));
-  // }, [classes, items, onClickTabAction]);
+  const topTabs = useMemo(() => {
+    return [...items.entries()].map(([key, item]) => (
+      <Tab
+        data-sidebar-key={key}
+        className={classes.tab}
+        value={key}
+        key={key}
+        title={item.title}
+        onClick={() => onClickTabAction(key)}
+        icon={
+          <Badge
+            className={classes.badge}
+            badgeContent={item.badge?.count}
+            invisible={item.badge == undefined}
+            color="error"
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+          >
+            <BuiltinIcon name={item.iconName} />
+          </Badge>
+        }
+      />
+    ));
+  }, [classes, items, onClickTabAction]);
 
-  // const bottomTabs = useMemo(() => {
-  //   return [...bottomItems.entries()].map(([key, item]) => (
-  //     <Tab
-  //       className={classes.tab}
-  //       value={key}
-  //       key={key}
-  //       title={item.title}
-  //       onClick={() => onClickTabAction(key)}
-  //       icon={
-  //         <Badge
-  //           className={classes.badge}
-  //           badgeContent={item.badge?.count}
-  //           invisible={item.badge == undefined}
-  //           color="error"
-  //           anchorOrigin={{
-  //             vertical: "bottom",
-  //             horizontal: "right",
-  //           }}
-  //         >
-  //           <BuiltinIcon name={item.iconName} />
-  //         </Badge>
-  //       }
-  //     />
-  //   ));
-  // }, [bottomItems, classes, onClickTabAction]);
+  const bottomTabs = useMemo(() => {
+    return [...bottomItems.entries()].map(([key, item]) => (
+      <Tab
+        className={classes.tab}
+        value={key}
+        key={key}
+        title={item.title}
+        onClick={() => onClickTabAction(key)}
+        icon={
+          <Badge
+            className={classes.badge}
+            badgeContent={item.badge?.count}
+            invisible={item.badge == undefined}
+            color="error"
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+          >
+            <BuiltinIcon name={item.iconName} />
+          </Badge>
+        }
+      />
+    ));
+  }, [bottomItems, classes, onClickTabAction]);
 
   const onChangeMosaicValue = useCallback(
     (newValue: ReactNull | MosaicNode<LayoutNode>) => {
@@ -385,9 +385,9 @@ export default function Sidebars<
                         setActiveTab={onSelectLeftKey}
                       />
                     ) : (
-                      // <Paper square elevation={0}>
-                      <SelectedLeftComponent />
-                      // </Paper>
+                      <Paper square elevation={0}>
+                        <SelectedLeftComponent />
+                      </Paper>
                     )}
                   </ErrorBoundary>
                 );

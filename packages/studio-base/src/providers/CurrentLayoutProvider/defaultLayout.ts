@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import { LayoutData } from "@foxglove/studio-base/context/CurrentLayoutContext/actions";
-// import { defaultPlaybackConfig } from "@foxglove/studio-base/providers/CurrentLayoutProvider/reducers";
+import { defaultPlaybackConfig } from "@foxglove/studio-base/providers/CurrentLayoutProvider/reducers";
 
 /**
  * This is loaded when the user has no layout selected on application launch
@@ -30,10 +30,10 @@ export const defaultLayout: LayoutData = {
       },
       cameraState: {
         perspective: true,
-        distance: 45.44146361605684,
-        phi: 47.53076308266325,
-        thetaOffset: 178.13965866685575,
-        targetOffset: [0, 0, 0],
+        distance: 24.554753262683736,
+        phi: 36.201161190731675,
+        thetaOffset: 48.278047585690395,
+        targetOffset: [-3.965138692308386, -1.1256807555962407, 2.237021977018253e-15],
         target: [0, 0, 0],
         targetOrientation: [0, 0, 0, 1],
         fovy: 45,
@@ -41,48 +41,36 @@ export const defaultLayout: LayoutData = {
         far: 5000,
       },
       followMode: "follow-pose",
-      followTf: "camera_init",
       scene: {},
-      transforms: {
-        "frame:camera_init": {
-          visible: true,
-        },
-        "frame:body": {
-          visible: true,
-        },
-      },
+      transforms: {},
       topics: {
-        "/cloud_registered": {
+        "/points": {
           visible: true,
-          colorField: "x",
-          colorMode: "gradient",
-          colorMap: "rainbow",
-          explicitAlpha: 0.5,
-          pointSize: 1,
-          flatColor: "#241ae857",
-          stixelsEnabled: false,
-          gradient: ["#a2ff007d", "#0d00ff7d"],
-          pointShape: "point",
-          maxValue: 500,
-          minValue: -500,
-          decayTime: 10000,
+          colorField: "intensity",
+          colorMode: "colormap",
+          colorMap: "turbo",
+          pointSize: 2,
         },
-        "/path": {
-          visible: true,
-          gradient: ["#e1ff00", "#bfff00"],
-          lineWidth: 0.32054570952558287,
-          type: "line",
-        },
-        "/initialpose": {
+        "/radar/points": {
           visible: false,
         },
-        "/Laser_map": {
+        "/cloud_registered": {
+          visible: true,
+          colorField: "intensity",
+          colorMode: "colormap",
+          colorMap: "turbo",
+          decayTime: 1000,
+          flatColor: "#0f0ff25c",
+          stixelsEnabled: false,
+          explicitAlpha: 0.40000000000000013,
+        },
+        "/initialpose": {
           visible: false,
         },
         "/move_base_simple/goal": {
           visible: false,
         },
-        "/cloud_effected": {
+        "/goal": {
           visible: false,
         },
       },
@@ -90,6 +78,7 @@ export const defaultLayout: LayoutData = {
         type: "point",
         poseTopic: "/move_base_simple/goal",
         pointTopic: "/clicked_point",
+        recordTopic: "/record_message",
         poseEstimateTopic: "/initialpose",
         poseEstimateXDeviation: 0.5,
         poseEstimateYDeviation: 0.5,
